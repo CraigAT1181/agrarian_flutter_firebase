@@ -42,3 +42,14 @@ android {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    // Add the Firebase platform BOM
+    implementation platform('com.google.firebase:firebase-bom:32.1.1') // Use the latest version
+
+    // Add Firebase Authentication and Firestore
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-firestore'
+}
+
+apply plugin: 'com.google.gms.google-services'
