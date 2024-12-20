@@ -19,16 +19,21 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8
     }
 
+android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.growexchange.agrarian"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        
+        // Explicitly set minSdkVersion to 23
+        minSdkVersion 23
+        
+        // Retain Flutter's dynamic configurations for other values
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
+}
+
 
     buildTypes {
         release {
