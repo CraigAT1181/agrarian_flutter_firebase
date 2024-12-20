@@ -1,3 +1,4 @@
+import 'package:agrarian/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:agrarian/models/user.dart';
 
@@ -16,13 +17,26 @@ class AuthService {
   }
 
   // Function: Register
-  Future<AgrarianUser?> register(String email, String password) async {
+  Future<AgrarianUser?> register(String email, String password, String userName,
+      String townName, String allotmentName, String profilePicPath) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
       User? user = result.user;
+
+      if (user == null) {
+        throw FirebaseAuthException(
+            code: "USER_NULL", message: "User registration failed.");
+      }
+
+      await DatabaseService(uid: user.uid)
+          .updateUserData(userName, profilePicPath, townName, allotmentName);
+
       return _agrarianUser(user);
+    } on FirebaseAuthException catch (e) {
+      print('FirebaseAuthException: ${e.message}');
+      return null;
     } catch (e) {
       print(e.toString());
       return null;
