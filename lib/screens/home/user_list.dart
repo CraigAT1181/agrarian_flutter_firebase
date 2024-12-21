@@ -1,5 +1,6 @@
+import 'package:agrarian/models/user_profile.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:agrarian/models/user_profile.dart';
 import 'package:provider/provider.dart';
 
 class UserList extends StatefulWidget {
@@ -12,12 +13,15 @@ class UserList extends StatefulWidget {
 class _UserListState extends State<UserList> {
   @override
   Widget build(BuildContext context) {
-    final users = Provider.of<QuerySnapshot>(context);
-    // print(users.docs);
+    final users = Provider.of<List<UserProfile>?>(context);
 
-    for (var doc in users.docs) {
-      print(doc.data());
-    }
-    return const Placeholder();
+    users?.forEach((user) {
+      print(user.userName);
+      print(user.profilePic);
+      print(user.town['name']);
+      print(user.allotment['name']);
+    });
+
+    return Container();
   }
 }

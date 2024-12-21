@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:agrarian/models/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:agrarian/services/auth.dart';
 import 'package:agrarian/services/database.dart';
 import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:agrarian/screens/home/user_list.dart';
 
 class Home extends StatelessWidget {
@@ -13,7 +12,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<QuerySnapshot?>.value(
+    return StreamProvider<List<UserProfile>?>.value(
       value: DatabaseService().users,
       initialData: null,
       child: Scaffold(

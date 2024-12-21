@@ -1,3 +1,4 @@
+import 'package:agrarian/models/user_profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService {
@@ -57,7 +58,17 @@ class DatabaseService {
     });
   }
 
-  Stream<QuerySnapshot> get users {
-    return userCollection.snapshots();
+  List<UserProfile> _userList(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return UserProfile(
+          userName: doc['userName'] ?? '',
+          profilePic: doc['profilePic'] ?? '',
+          town: doc['town'] ?? '',
+          allotment: doc['allotment'] ?? '');
+    }).toList();
+  }
+
+  Stream<List<UserProfile>> get users {
+    return userCollection.snapshots().map(_userList);
   }
 }
