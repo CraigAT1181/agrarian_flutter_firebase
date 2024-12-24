@@ -1,4 +1,4 @@
-import 'package:agrarian/models/user_profile.dart';
+import 'package:agrarian/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService {
@@ -58,17 +58,35 @@ class DatabaseService {
     });
   }
 
-  List<UserProfile> _userList(QuerySnapshot snapshot) {
-    return snapshot.docs.map((doc) {
-      return UserProfile(
-          userName: doc['userName'] ?? '',
-          profilePic: doc['profilePic'] ?? '',
-          town: doc['town'] ?? '',
-          allotment: doc['allotment'] ?? '');
-    }).toList();
+  Future<UserProfile?> getUserProfile() async {
+    try {
+      DocumentSnapshot userDoc =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+      if (userDoc.exists) {
+        return UserProfile(
+            userName: userDoc['userName'],
+            profilePic: userDoc['profilePic'],
+            town: userDoc['town'],
+            allotment: userDoc['allotment']);
+      }
+    } catch (e) {
+      print('Error fetching user profile: $e');
+    }
+    return null;
   }
 
-  Stream<List<UserProfile>> get users {
-    return userCollection.snapshots().map(_userList);
+  Stream<UserProfile?> userProfileStream() {
+    return userCollection.doc(uid).snapshots().map((snapshot) {
+      if (snapshot.exists) {
+        return UserProfile(
+            userName: snapshot['userName'],
+            profilePic: snapshot['profilePic'],
+            town: snapshot['town'],
+            allotment: snapshot['allotment']);
+      } else {
+        return null;
+      }
+    });
   }
 }

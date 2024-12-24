@@ -1,7 +1,7 @@
-import 'package:agrarian/models/user_profile.dart';
+import 'package:agrarian/models/user.dart';
 import 'package:flutter/material.dart';
-import 'package:agrarian/models/user_profile.dart';
 import 'package:provider/provider.dart';
+import 'user_card.dart';
 
 class UserList extends StatefulWidget {
   const UserList({super.key});
@@ -15,13 +15,10 @@ class _UserListState extends State<UserList> {
   Widget build(BuildContext context) {
     final users = Provider.of<List<UserProfile>?>(context);
 
-    users?.forEach((user) {
-      print(user.userName);
-      print(user.profilePic);
-      print(user.town['name']);
-      print(user.allotment['name']);
-    });
-
-    return Container();
+    return ListView.builder(
+        itemCount: users?.length,
+        itemBuilder: (context, index) {
+          return UserCard(user: users?[index]);
+        });
   }
 }
