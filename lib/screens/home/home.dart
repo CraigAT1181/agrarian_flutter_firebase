@@ -44,14 +44,22 @@ class _HomeState extends State<Home> {
               },
               icon: CircleAvatar(
                 backgroundColor: Colors.white,
-                radius: 50,
+                radius: 25,
                 child: ClipOval(
-                  child: Image.asset(
-                    'assets/no_image.jpg',
-                    fit: BoxFit.cover,
-                    height: 50,
-                    width: 50,
-                  ),
+                  child: userProfile?.profilePicURL != null &&
+                          userProfile!.profilePicURL.isNotEmpty
+                      ? Image.network(
+                          userProfile.profilePicURL,
+                          fit: BoxFit.cover,
+                          height: 50,
+                          width: 50,
+                        )
+                      : Image.asset(
+                          'assets/no_image.jpg',
+                          fit: BoxFit.cover,
+                          height: 50,
+                          width: 50,
+                        ),
                 ),
               )),
         ),
