@@ -1,4 +1,3 @@
-import 'package:agrarian/screens/allotment/allotment.dart';
 import 'package:flutter/material.dart';
 import 'package:agrarian/services/auth.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +16,7 @@ class Home extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Agrarian'),
-        backgroundColor: Colors.green[800],
+        backgroundColor: Colors.green[900],
         foregroundColor: Colors.white,
         elevation: 0.0,
         actions: <Widget>[
@@ -47,7 +46,7 @@ class Home extends StatelessWidget {
               height: 250,
               child: DrawerHeader(
                 decoration: BoxDecoration(
-                  color: Colors.green[800],
+                  color: Colors.green[900],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -60,7 +59,7 @@ class Home extends StatelessWidget {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      userProfile!.userName,
+                      userProfile?.userName ?? 'Guest',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -71,14 +70,14 @@ class Home extends StatelessWidget {
                       height: 10,
                     ),
                     Text(
-                      userProfile.town['name'],
+                      userProfile?.location ?? '',
                       style: TextStyle(
                         color: Colors.white70,
                         fontSize: 14,
                       ),
                     ),
                     Text(
-                      userProfile.allotment['name'],
+                      userProfile?.bio ?? '',
                       style: TextStyle(
                         color: Colors.white70,
                         fontSize: 14,
@@ -92,56 +91,161 @@ class Home extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(32, 20, 32, 20),
               child: Column(
                 children: [
-                  Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                    Icon(Icons.eco),
-                    SizedBox(width: 40.0),
-                    Text('Allotment'),
-                  ]),
-                  SizedBox(height: 20),
-                  Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                    Icon(Icons.apartment),
-                    SizedBox(width: 40.0),
-                    Text('Town'),
-                  ]),
-                  SizedBox(height: 20),
-                  Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                    Icon(Icons.bookmark),
-                    SizedBox(width: 40.0),
-                    Text('Bookmarks'),
-                  ]),
-                  SizedBox(height: 20),
-                  Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                    Icon(Icons.message),
-                    SizedBox(width: 40.0),
-                    Text('Messages'),
-                  ]),
-                  SizedBox(height: 20),
-                  Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                    Icon(Icons.notifications),
-                    SizedBox(width: 40.0),
-                    Text('Notifications'),
-                  ]),
-                  SizedBox(height: 20),
+                  TextButton(
+                      onPressed: () async {},
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.eco,
+                            color: Colors.green[900],
+                            size: 25,
+                          ),
+                          const SizedBox(
+                            width: 40.0,
+                          ),
+                          Text(
+                            'Allotment',
+                            style: TextStyle(
+                              color: Colors.green[900],
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ],
+                      )),
+                  TextButton(
+                      onPressed: () async {},
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.apartment,
+                            color: Colors.green[900],
+                            size: 25,
+                          ),
+                          const SizedBox(
+                            width: 40.0,
+                          ),
+                          Text(
+                            'Town',
+                            style: TextStyle(
+                              color: Colors.green[900],
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ],
+                      )),
+                  TextButton(
+                      onPressed: () async {},
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.bookmark,
+                            color: Colors.green[900],
+                            size: 25,
+                          ),
+                          const SizedBox(
+                            width: 40.0,
+                          ),
+                          Text(
+                            'Bookmarks',
+                            style: TextStyle(
+                              color: Colors.green[900],
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ],
+                      )),
+                  TextButton(
+                      onPressed: () async {},
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.message,
+                            color: Colors.green[900],
+                            size: 25,
+                          ),
+                          const SizedBox(
+                            width: 40.0,
+                          ),
+                          Text(
+                            'Messages',
+                            style: TextStyle(
+                              color: Colors.green[900],
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ],
+                      )),
+                  TextButton(
+                      onPressed: () async {},
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.notifications,
+                            color: Colors.green[900],
+                            size: 25,
+                          ),
+                          const SizedBox(
+                            width: 40.0,
+                          ),
+                          Text(
+                            'Notifications',
+                            style: TextStyle(
+                              color: Colors.green[900],
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ],
+                      )),
                   Divider(),
-                  SizedBox(height: 20),
-                  Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                    Icon(Icons.settings),
-                    SizedBox(width: 40.0),
-                    Text('Settings')
-                  ]),
-                  SizedBox(height: 20),
-                  Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                    Icon(Icons.logout),
-                    SizedBox(width: 40.0),
-                    Text('Sign Out')
-                  ]),
+                  TextButton(
+                      onPressed: () async {},
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.settings,
+                            color: Colors.green[900],
+                            size: 25,
+                          ),
+                          const SizedBox(
+                            width: 40.0,
+                          ),
+                          Text(
+                            'Settings',
+                            style: TextStyle(
+                              color: Colors.green[900],
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ],
+                      )),
+                  TextButton(
+                      onPressed: () async {},
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.logout,
+                            color: Colors.green[900],
+                            size: 25,
+                          ),
+                          const SizedBox(
+                            width: 40.0,
+                          ),
+                          Text(
+                            'Sign Out',
+                            style: TextStyle(
+                              color: Colors.green[900],
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ],
+                      )),
                 ],
               ),
             )
           ],
         ),
       ),
-      body: Allotment(),
+      // body: Allotment(),
     );
   }
 }

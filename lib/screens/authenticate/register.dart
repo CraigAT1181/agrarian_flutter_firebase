@@ -1,9 +1,11 @@
 import 'package:agrarian/shared/loading.dart';
 import 'package:flutter/material.dart';
+import 'package:agrarian/shared/constants.dart';
 import 'package:agrarian/services/auth.dart';
 import 'package:agrarian/shared/widgets/buttons/primary_button.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:agrarian/services/geonames.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key, required this.toggleView});
@@ -15,14 +17,38 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  final GeoNamesService _geoNamesService = GeoNamesService();
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _locationController = TextEditingController();
+
+  List<String> _suggestions = [];
+
+  void _fetchSuggestions(String input) async {
+    if (input.isEmpty) {
+      if (mounted) {
+        setState(() => _suggestions = []);
+      }
+      return;
+    }
+
+    try {
+      final results = await _geoNamesService.getLocations(input);
+
+      if (mounted) {
+        setState(() => _suggestions = results);
+      }
+    } catch (e) {
+      print('Error fetching suggestions: $e');
+    }
+  }
 
   String email = '';
   String password = '';
   String userName = '';
-  String townName = '';
-  String allotmentName = '';
+  String location = '';
+  String bio = '';
   File? profilePic;
 
   String error = '';
@@ -46,7 +72,7 @@ class _RegisterState extends State<Register> {
         : Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              backgroundColor: Colors.green[800],
+              backgroundColor: Colors.green[900],
               foregroundColor: Colors.white,
               elevation: 0.0,
               title: const Text('Welcome!'),
@@ -70,7 +96,10 @@ class _RegisterState extends State<Register> {
                           height: 20.0,
                         ),
                         TextFormField(
-                          decoration: InputDecoration(hintText: 'Email'),
+                          decoration: textInputDecoration.copyWith(
+                              hintText: 'Email',
+                              hintStyle: TextStyle(
+                                  fontSize: 14.0, color: Colors.grey[500])),
                           validator: (value) => value == null || value.isEmpty
                               ? 'Please enter an email address.'
                               : null,
@@ -82,7 +111,10 @@ class _RegisterState extends State<Register> {
                           height: 20.0,
                         ),
                         TextFormField(
-                          decoration: InputDecoration(hintText: 'Password'),
+                          decoration: textInputDecoration.copyWith(
+                              hintText: 'Password',
+                              hintStyle: TextStyle(
+                                  fontSize: 14.0, color: Colors.grey[500])),
                           validator: (value) => value == null ||
                                   value.length < 6
                               ? 'Please ensure password is at least 6 characters long.'
@@ -96,7 +128,10 @@ class _RegisterState extends State<Register> {
                           height: 20.0,
                         ),
                         TextFormField(
-                          decoration: InputDecoration(hintText: 'User Name'),
+                          decoration: textInputDecoration.copyWith(
+                              hintText: 'User Name',
+                              hintStyle: TextStyle(
+                                  fontSize: 14.0, color: Colors.grey[500])),
                           validator: (value) => value == null || value.isEmpty
                               ? 'Please enter a user name.'
                               : null,
@@ -108,30 +143,61 @@ class _RegisterState extends State<Register> {
                           height: 20.0,
                         ),
                         TextFormField(
-                          decoration: InputDecoration(hintText: 'Town'),
-                          validator: (value) => value == null || value.isEmpty
-                              ? 'Please enter your town name.'
-                              : null,
-                          onChanged: (val) {
-                            setState(() => townName = val);
-                          },
+                            controller: _locationController,
+                            decoration: textInputDecoration.copyWith(
+                                hintText: 'Location',
+                                hintStyle: TextStyle(
+                                    fontSize: 14.0, color: Colors.grey[500])),
+                            validator: (value) => value == null || value.isEmpty
+                                ? 'Please enter your location.'
+                                : null,
+                            onChanged: _fetchSuggestions),
+                        const SizedBox(
+                          height: 10.0,
                         ),
+                        if (_locationController.text.isNotEmpty &&
+                            _suggestions.isNotEmpty)
+                          Stack(children: [
+                            SizedBox(
+                              height: 200,
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: _suggestions.length,
+                                  itemBuilder: (context, index) {
+                                    return ListTile(
+                                      title: Text(_suggestions[index]),
+                                      onTap: () {
+                                        _locationController.text =
+                                            _suggestions[index];
+                                        setState(() {
+                                          location = _suggestions[index];
+                                          _suggestions = [];
+                                        });
+                                      },
+                                    );
+                                  }),
+                            ),
+                          ]),
                         const SizedBox(
                           height: 20.0,
                         ),
                         TextFormField(
-                          decoration: InputDecoration(hintText: 'Allotment'),
+                          decoration: textInputDecoration.copyWith(
+                              hintText: 'About you',
+                              hintStyle: TextStyle(
+                                  fontSize: 14.0, color: Colors.grey[500])),
                           validator: (value) => value == null || value.isEmpty
-                              ? 'Please enter the name of your allotment.'
+                              ? 'Tell us something about yourself.'
                               : null,
                           onChanged: (val) {
-                            setState(() => allotmentName = val);
+                            setState(() => bio = val);
                           },
                         ),
                         const SizedBox(
                           height: 40.0,
                         ),
-                        GestureDetector(
+                        InkWell(
                           onTap: profilePic == null
                               ? _pickImage
                               : () {
@@ -183,7 +249,7 @@ class _RegisterState extends State<Register> {
                                       ? Icon(
                                           Icons.add_a_photo,
                                           size: 40,
-                                          color: Colors.green[800],
+                                          color: Colors.green[900],
                                         )
                                       : null,
                                 ),
@@ -205,16 +271,18 @@ class _RegisterState extends State<Register> {
                                     email,
                                     password,
                                     userName,
-                                    townName,
-                                    allotmentName,
+                                    location,
+                                    bio,
                                     profilePicPath);
 
                                 if (result == null) {
-                                  setState(() {
-                                    error =
-                                        'Oops, something went wrong! Please try again.';
-                                    loading = false;
-                                  });
+                                  if (mounted) {
+                                    setState(() {
+                                      error =
+                                          'Oops, something went wrong! Please try again.';
+                                      loading = false;
+                                    });
+                                  }
                                 }
                               }
                             },

@@ -9,53 +9,50 @@ class DatabaseService {
   final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('users');
 
-  final CollectionReference townCollection =
-      FirebaseFirestore.instance.collection('towns');
+  final CollectionReference locationCollection =
+      FirebaseFirestore.instance.collection('locations');
 
-  final CollectionReference allotmentCollection =
-      FirebaseFirestore.instance.collection('allotments');
+  final CollectionReference postCollection =
+      FirebaseFirestore.instance.collection('posts');
 
   // Function: Used for both initial registration and later updates
-  Future updateUserData(String userName, String profilePicPath, String townName,
-      String allotmentName) async {
-    // Step 1: Query townName
-    QuerySnapshot townSnapShot =
-        await townCollection.where('name', isEqualTo: townName).limit(1).get();
+  Future<void> updateUserData(String userName, String email,
+      String profilePicPath, String location, String bio) async {
+    try {
+      // Step 1: Query location
+      QuerySnapshot locationSnapShot = await locationCollection
+          .where('name', isEqualTo: location)
+          .limit(1)
+          .get();
 
-    // Step 2: Get town data
-    Map<String, dynamic>? townData;
-    if (townSnapShot.docs.isNotEmpty) {
-      townData = townSnapShot.docs.first.data() as Map<String, dynamic>;
-      townData['id'] = townSnapShot.docs.first.id;
-    } else {
-      throw 'Town not found';
+      print('locationSnapshot: $locationSnapShot');
+      // Step 2: Get location data
+      Map<String, dynamic> locationData;
+      if (locationSnapShot.docs.isNotEmpty) {
+        locationData =
+            locationSnapShot.docs.first.data() as Map<String, dynamic>;
+        locationData['id'] = locationSnapShot.docs.first.id;
+      } else {
+        DocumentReference newLocation = await locationCollection.add({
+          'name': location,
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+
+        locationData = {'id': newLocation.id, 'name': location};
+      }
+
+      // Step 5: Add the new user document to the users collection
+      return await userCollection.doc(uid).set({
+        'userName': userName,
+        'email': email,
+        'profilePic': profilePicPath,
+        'location': locationData['name'],
+        'bio': bio
+      });
+    } catch (e) {
+      print('Error updating user data: $e');
+      rethrow;
     }
-
-    // Step 3: Query the allotment by name within the specific town's sub-collection
-    DocumentReference townRef = townSnapShot.docs.first.reference;
-    QuerySnapshot allotmentSnapshot = await townRef
-        .collection('allotments')
-        .where('name', isEqualTo: allotmentName)
-        .limit(1)
-        .get();
-
-    // Step 4: Get the allotment data
-    Map<String, dynamic>? allotmentData;
-    if (allotmentSnapshot.docs.isNotEmpty) {
-      allotmentData =
-          allotmentSnapshot.docs.first.data() as Map<String, dynamic>;
-      allotmentData['id'] = allotmentSnapshot.docs.first.id;
-    } else {
-      throw "Allotment not found.";
-    }
-
-    // Step 5: Add the new user document to the users collection
-    return await userCollection.doc(uid).set({
-      'userName': userName,
-      'profilePic': profilePicPath,
-      'town': townData,
-      'allotment': allotmentData
-    });
   }
 
   Future<UserProfile?> getUserProfile() async {
@@ -66,9 +63,10 @@ class DatabaseService {
       if (userDoc.exists) {
         return UserProfile(
             userName: userDoc['userName'],
-            profilePic: userDoc['profilePic'],
-            town: userDoc['town'],
-            allotment: userDoc['allotment']);
+            email: userDoc['email'],
+            profilePicURL: userDoc['profilePic'],
+            location: userDoc['location'],
+            bio: userDoc['bio']);
       }
     } catch (e) {
       print('Error fetching user profile: $e');
@@ -81,12 +79,22 @@ class DatabaseService {
       if (snapshot.exists) {
         return UserProfile(
             userName: snapshot['userName'],
-            profilePic: snapshot['profilePic'],
-            town: snapshot['town'],
-            allotment: snapshot['allotment']);
+            email: snapshot['email'],
+            profilePicURL: snapshot['profilePic'],
+            location: snapshot['location'],
+            bio: snapshot['bio']);
       } else {
         return null;
       }
     });
   }
+
+  // Stream<List<Map<String, dynamic>>> getPosts() {
+  //   return postCollection
+  //       .orderBy('createdBy', descending: true)
+  //       .snapshots()
+  //       .map((snapshot) => snapshot.docs
+  //           .map((doc) => doc.data() as Map<String, dynamic>)
+  //           .toList());
+  // }
 }

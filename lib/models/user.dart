@@ -6,13 +6,15 @@ class AgrarianUser {
 
 class UserProfile {
   final String userName;
-  final String profilePic;
-  final Map<String, dynamic> town;
-  final Map<String, dynamic> allotment;
+  final String email;
+  final String profilePicURL;
+  final String location;
+  final String bio;
 
   UserProfile(
       {required this.userName,
-      required this.profilePic,
-      required this.town,
-      required this.allotment});
+      required this.email,
+      required this.profilePicURL,
+      required this.location,
+      required this.bio});
 }

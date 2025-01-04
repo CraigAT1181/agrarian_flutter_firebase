@@ -31,7 +31,7 @@ class _SignInState extends State<SignIn> {
         : Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              backgroundColor: Colors.green[800],
+              backgroundColor: Colors.green[900],
               foregroundColor: Colors.white,
               elevation: 0.0,
               title: const Text('Welcome back!'),
@@ -54,8 +54,10 @@ class _SignInState extends State<SignIn> {
                         height: 20.0,
                       ),
                       TextFormField(
-                        decoration:
-                            textInputDecoration.copyWith(hintText: 'Email'),
+                        decoration: textInputDecoration.copyWith(
+                            hintText: 'Email',
+                            hintStyle: TextStyle(
+                                fontSize: 14.0, color: Colors.grey[500])),
                         validator: (value) => value == null || value.isEmpty
                             ? 'Please enter an email address.'
                             : null,
@@ -67,8 +69,10 @@ class _SignInState extends State<SignIn> {
                         height: 20.0,
                       ),
                       TextFormField(
-                        decoration:
-                            textInputDecoration.copyWith(hintText: 'Password'),
+                        decoration: textInputDecoration.copyWith(
+                            hintText: 'Password',
+                            hintStyle: TextStyle(
+                                fontSize: 14.0, color: Colors.grey[500])),
                         validator: (value) => value == null || value.length < 6
                             ? 'Please ensure password is at least 6 characters long.'
                             : null,

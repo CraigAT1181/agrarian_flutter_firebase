@@ -12,13 +12,13 @@ class SecondaryButton extends StatelessWidget {
     return TextButton(
         style: TextButton.styleFrom(
             backgroundColor: Colors.white,
-            foregroundColor: Colors.green[800],
+            foregroundColor: Colors.green[900],
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5)))),
         onPressed: onPressed,
         child: Text(
           text,
-          style: TextStyle(color: Colors.green[800]),
+          style: TextStyle(color: Colors.green[900]),
         ));
   }
 }
