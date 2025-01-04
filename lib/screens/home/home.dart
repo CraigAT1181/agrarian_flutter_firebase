@@ -1,3 +1,4 @@
+import 'package:agrarian/screens/location_feed.dart';
 import 'package:flutter/material.dart';
 import 'package:agrarian/services/auth.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,7 @@ class _HomeState extends State<Home> {
 
   // Example pages
   final List<Widget> _pages = [
-    Center(child: Text('Home Page')),
+    LocationFeed(),
     Center(child: Text('Search Page')),
     Center(child: Text('Notifications Page')),
     Center(child: Text('Profile Page')),
@@ -309,8 +310,8 @@ class _HomeState extends State<Home> {
         type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
             label: '',
           ),
           BottomNavigationBarItem(
