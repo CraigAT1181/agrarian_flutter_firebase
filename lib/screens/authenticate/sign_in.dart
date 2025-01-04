@@ -34,7 +34,7 @@ class _SignInState extends State<SignIn> {
               backgroundColor: Colors.green[900],
               foregroundColor: Colors.white,
               elevation: 0.0,
-              title: const Text('Welcome back!'),
+              title: const Text('Sign In'),
               actions: <Widget>[
                 const Icon(Icons.person),
                 TextButton(

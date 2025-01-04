@@ -38,11 +38,23 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: Builder(
-            builder: (context) => IconButton(
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-                icon: Icon(Icons.person))),
+          builder: (context) => IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              icon: CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 50,
+                child: ClipOval(
+                  child: Image.asset(
+                    'assets/no_image.jpg',
+                    fit: BoxFit.cover,
+                    height: 50,
+                    width: 50,
+                  ),
+                ),
+              )),
+        ),
         title: Text('Agrarian'),
         backgroundColor: Colors.green[900],
         foregroundColor: Colors.white,

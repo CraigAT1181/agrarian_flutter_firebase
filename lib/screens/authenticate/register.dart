@@ -75,7 +75,7 @@ class _RegisterState extends State<Register> {
               backgroundColor: Colors.green[900],
               foregroundColor: Colors.white,
               elevation: 0.0,
-              title: const Text('Welcome!'),
+              title: const Text('Register'),
               actions: <Widget>[
                 const Icon(Icons.person),
                 TextButton(
