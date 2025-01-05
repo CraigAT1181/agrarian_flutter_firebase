@@ -23,6 +23,8 @@ class _RegisterState extends State<Register> {
 
   final TextEditingController _locationController = TextEditingController();
 
+  bool _isPasswordVisible = false;
+
   List<String> _suggestions = [];
 
   void _fetchSuggestions(String input) async {
@@ -112,6 +114,15 @@ class _RegisterState extends State<Register> {
                         ),
                         TextFormField(
                           decoration: textInputDecoration.copyWith(
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _isPasswordVisible = !_isPasswordVisible;
+                                    });
+                                  },
+                                  icon: Icon(_isPasswordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off)),
                               hintText: 'Password',
                               hintStyle: TextStyle(
                                   fontSize: 14.0, color: Colors.grey[500])),
@@ -119,7 +130,7 @@ class _RegisterState extends State<Register> {
                                   value.length < 6
                               ? 'Please ensure password is at least 6 characters long.'
                               : null,
-                          obscureText: true,
+                          obscureText: !_isPasswordVisible,
                           onChanged: (val) {
                             setState(() => password = val);
                           },

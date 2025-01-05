@@ -256,9 +256,7 @@ class _HomeState extends State<Home> {
                       )),
                   Divider(),
                   TextButton(
-                      onPressed: () async {
-                        await _auth.signOut();
-                      },
+                      onPressed: () async {},
                       child: Row(
                         children: [
                           Icon(
@@ -279,7 +277,9 @@ class _HomeState extends State<Home> {
                         ],
                       )),
                   TextButton(
-                      onPressed: () async {},
+                      onPressed: () async {
+                        await _auth.signOut();
+                      },
                       child: Row(
                         children: [
                           Icon(

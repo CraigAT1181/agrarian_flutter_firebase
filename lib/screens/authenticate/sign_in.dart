@@ -20,9 +20,9 @@ class _SignInState extends State<SignIn> {
 
   String email = '';
   String password = '';
-
   String error = '';
   bool loading = false;
+  bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -70,13 +70,22 @@ class _SignInState extends State<SignIn> {
                       ),
                       TextFormField(
                         decoration: textInputDecoration.copyWith(
+                            suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _isPasswordVisible = !_isPasswordVisible;
+                                  });
+                                },
+                                icon: Icon(_isPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off)),
                             hintText: 'Password',
                             hintStyle: TextStyle(
                                 fontSize: 14.0, color: Colors.grey[500])),
                         validator: (value) => value == null || value.length < 6
                             ? 'Please ensure password is at least 6 characters long.'
                             : null,
-                        obscureText: true,
+                        obscureText: !_isPasswordVisible,
                         onChanged: (val) {
                           setState(() => password = val);
                         },
