@@ -18,7 +18,7 @@ class AuthService {
 
   // Function: Register
   Future<AgrarianUser?> register(String email, String password, String userName,
-      String location, String bio, String profilePicPath) async {
+      String location, String bio, String? publicUrl) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -32,7 +32,7 @@ class AuthService {
       }
 
       await DatabaseService(uid: user.uid)
-          .updateUserData(userName, email, profilePicPath, location, bio);
+          .updateUserData(userName, email, publicUrl, location, bio);
 
       return _agrarianUser(user);
     } on FirebaseAuthException catch (e) {

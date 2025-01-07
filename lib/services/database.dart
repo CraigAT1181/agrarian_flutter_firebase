@@ -16,8 +16,8 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('posts');
 
   // Function: Used for both initial registration and later updates
-  Future<void> updateUserData(String userName, String email,
-      String profilePicPath, String location, String bio) async {
+  Future<void> updateUserData(String userName, String email, String? publicUrl,
+      String location, String bio) async {
     try {
       // Step 1: Query location
       QuerySnapshot locationSnapShot = await locationCollection
@@ -45,7 +45,7 @@ class DatabaseService {
       return await userCollection.doc(uid).set({
         'userName': userName,
         'email': email,
-        'profilePic': profilePicPath,
+        'profilePic': publicUrl,
         'location': locationData['name'],
         'bio': bio
       });

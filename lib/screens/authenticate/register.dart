@@ -1,3 +1,4 @@
+import 'package:agrarian/services/supabase.dart';
 import 'package:agrarian/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:agrarian/shared/constants.dart';
@@ -276,15 +277,41 @@ class _RegisterState extends State<Register> {
                               if (_formKey.currentState != null &&
                                   _formKey.currentState!.validate()) {
                                 setState(() => loading = true);
-                                final String profilePicPath =
-                                    profilePic?.path ?? 'assets/no_image.jpg';
+
+                                final String? filePath = profilePic?.path;
+
+                                String? fileName = '';
+                                if (filePath != null) {
+                                  fileName =
+                                      'profile_${DateTime.now().microsecondsSinceEpoch}.jpg';
+                                }
+
+                                final String? publicUrl = filePath == null
+                                    ? null
+                                    : await SupabaseService().uploadFile(
+                                        bucketName: 'profile-pictures',
+                                        filePath: filePath,
+                                        fileName: fileName);
+
+                                if (filePath != null && publicUrl == null) {
+                                  if (mounted) {
+                                    setState(() {
+                                      error =
+                                          'Failed to upload profile picture. Please try again.';
+                                      loading = false;
+                                    });
+                                  }
+                                  return;
+                                }
+
                                 dynamic result = await _auth.register(
-                                    email,
-                                    password,
-                                    userName,
-                                    location,
-                                    bio,
-                                    profilePicPath);
+                                  email,
+                                  password,
+                                  userName,
+                                  location,
+                                  bio,
+                                  publicUrl,
+                                );
 
                                 if (result == null) {
                                   if (mounted) {
