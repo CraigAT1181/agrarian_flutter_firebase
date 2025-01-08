@@ -26,7 +26,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
         padding: EdgeInsets.zero,
         children: [
           SizedBox(
-            height: 200,
+            height: 250,
             child: DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.green[900],
@@ -83,25 +83,41 @@ class _HomeDrawerState extends State<HomeDrawer> {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(32, 20, 32, 20),
-            child: Column(
-              children: [
-                _drawerButton(
-                    Icons.group, 'Community', () => widget.onPageSelected(0)),
-                _drawerButton(
-                    Icons.school, 'Skill-Up', () => widget.onPageSelected(1)),
-                _drawerButton(
-                    Icons.handshake, 'Barter', () => widget.onPageSelected(2)),
-                _drawerButton(
-                    Icons.message, 'Messages', () => widget.onPageSelected(3)),
-                _drawerButton(Icons.notifications, 'Notifications',
-                    () => widget.onPageSelected(4)),
-                Divider(),
-                _drawerButton(Icons.settings, 'Settings', () async {}),
-                _drawerButton(Icons.logout, 'Sign Out', () async {
-                  await _auth.signOut();
-                }),
-              ],
-            ),
+            child: userProfile == null
+                ? Column(
+                    children: [
+                      _drawerButton(Icons.group, 'Community',
+                          () => widget.onPageSelected(0)),
+                      _drawerButton(Icons.school, 'Skill-Up',
+                          () => widget.onPageSelected(1)),
+                      _drawerButton(Icons.handshake, 'Barter',
+                          () => widget.onPageSelected(2)),
+                      Divider(),
+                      _drawerButton(Icons.settings, 'Settings', () async {}),
+                      _drawerButton(Icons.logout, 'Sign Out', () async {
+                        await _auth.signOut();
+                      }),
+                    ],
+                  )
+                : Column(
+                    children: [
+                      _drawerButton(Icons.group, 'Community',
+                          () => widget.onPageSelected(0)),
+                      _drawerButton(Icons.school, 'Skill-Up',
+                          () => widget.onPageSelected(1)),
+                      _drawerButton(Icons.handshake, 'Barter',
+                          () => widget.onPageSelected(2)),
+                      _drawerButton(Icons.message, 'Messages',
+                          () => widget.onPageSelected(3)),
+                      _drawerButton(Icons.notifications, 'Notifications',
+                          () => widget.onPageSelected(4)),
+                      Divider(),
+                      _drawerButton(Icons.settings, 'Settings', () async {}),
+                      _drawerButton(Icons.logout, 'Sign Out', () async {
+                        await _auth.signOut();
+                      }),
+                    ],
+                  ),
           ),
         ],
       ),
