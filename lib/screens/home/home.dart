@@ -1,4 +1,10 @@
-import 'package:agrarian/screens/location_feed.dart';
+import 'package:agrarian/screens/bartering/bartering.dart';
+import 'package:agrarian/screens/community/community.dart';
+import 'package:agrarian/screens/home/bottom_navigation.dart';
+import 'package:agrarian/screens/home/home_drawer.dart';
+import 'package:agrarian/screens/messages/messages.dart';
+import 'package:agrarian/screens/notifications/notifications.dart';
+import 'package:agrarian/screens/skill_up/skill_up.dart';
 import 'package:flutter/material.dart';
 import 'package:agrarian/services/auth.dart';
 import 'package:provider/provider.dart';
@@ -14,21 +20,22 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
 
-  int _selectedIndex = 0;
+  int selectedIndex = 0;
 
   // Example pages
   final List<Widget> _pages = [
-    LocationFeed(),
-    Center(child: Text('Search Page')),
-    Center(child: Text('Notifications Page')),
-    Center(child: Text('Profile Page')),
-    Center(child: Text('Food Page')),
+    Community(),
+    SkillUp(),
+    Bartering(),
+    Messages(),
+    Notifications(),
   ];
 
   void onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      selectedIndex = index;
     });
+    // Navigator.pop(context);
   }
 
   @override
@@ -36,310 +43,70 @@ class _HomeState extends State<Home> {
     final userProfile = Provider.of<UserProfile?>(context);
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: Builder(
-          builder: (context) => IconButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              icon: CircleAvatar(
-                backgroundColor: Colors.white,
-                radius: 25,
-                child: ClipOval(
-                  child: userProfile?.profilePicURL != null &&
-                          userProfile!.profilePicURL.isNotEmpty
-                      ? Image.network(
-                          userProfile.profilePicURL,
-                          fit: BoxFit.cover,
-                          height: 50,
-                          width: 50,
-                        )
-                      : Image.asset(
-                          'assets/no_image.jpg',
-                          fit: BoxFit.cover,
-                          height: 50,
-                          width: 50,
-                        ),
-                ),
-              )),
-        ),
-        title: Text('Agrarian'),
-        backgroundColor: Colors.green[900],
-        foregroundColor: Colors.white,
-        elevation: 0.0,
-        actions: [
-          Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  TextButton(
-                      onPressed: () async {
-                        await _auth.signOut();
-                      },
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.logout,
-                            color: Colors.white,
-                          ),
-                          SizedBox(
-                            width: 8.0,
-                          ),
-                          Text(
-                            'Sign out',
-                            style: TextStyle(color: Colors.white),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          leading: Builder(
+            builder: (context) => IconButton(
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                icon: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: 25,
+                  child: ClipOval(
+                    child: userProfile?.profilePicURL != null &&
+                            userProfile!.profilePicURL.isNotEmpty
+                        ? Image.network(
+                            userProfile.profilePicURL,
+                            fit: BoxFit.cover,
+                            height: 50,
+                            width: 50,
                           )
-                        ],
-                      ))
-                ],
-              )),
-        ],
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            SizedBox(
-              height: 250,
-              child: DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.green[900],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage(
-                        'assets/no_image.jpg',
-                      ),
-                      radius: 30,
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      userProfile?.userName ?? 'Guest',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      userProfile?.location ?? '',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 14,
-                      ),
-                    ),
-                    Text(
-                      userProfile?.bio ?? '',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                        : Image.asset(
+                            'assets/no_image.jpg',
+                            fit: BoxFit.cover,
+                            height: 50,
+                            width: 50,
+                          ),
+                  ),
+                )),
+          ),
+          title: Text('Agrarian'),
+          backgroundColor: Colors.green[900],
+          foregroundColor: Colors.white,
+          elevation: 0.0,
+          actions: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(32, 20, 32, 20),
-              child: Column(
-                children: [
-                  TextButton(
-                      onPressed: () async {},
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.eco,
-                            color: Colors.green[900],
-                            size: 25,
-                          ),
-                          const SizedBox(
-                            width: 40.0,
-                          ),
-                          Text(
-                            'Allotment',
-                            style: TextStyle(
-                              color: Colors.green[900],
-                              fontSize: 16.0,
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    TextButton(
+                        onPressed: () async {
+                          await _auth.signOut();
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.logout,
+                              color: Colors.white,
                             ),
-                          ),
-                        ],
-                      )),
-                  TextButton(
-                      onPressed: () async {},
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.apartment,
-                            color: Colors.green[900],
-                            size: 25,
-                          ),
-                          const SizedBox(
-                            width: 40.0,
-                          ),
-                          Text(
-                            'Town',
-                            style: TextStyle(
-                              color: Colors.green[900],
-                              fontSize: 16.0,
+                            SizedBox(
+                              width: 8.0,
                             ),
-                          ),
-                        ],
-                      )),
-                  TextButton(
-                      onPressed: () async {},
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.bookmark,
-                            color: Colors.green[900],
-                            size: 25,
-                          ),
-                          const SizedBox(
-                            width: 40.0,
-                          ),
-                          Text(
-                            'Bookmarks',
-                            style: TextStyle(
-                              color: Colors.green[900],
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        ],
-                      )),
-                  TextButton(
-                      onPressed: () async {},
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.message,
-                            color: Colors.green[900],
-                            size: 25,
-                          ),
-                          const SizedBox(
-                            width: 40.0,
-                          ),
-                          Text(
-                            'Messages',
-                            style: TextStyle(
-                              color: Colors.green[900],
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        ],
-                      )),
-                  TextButton(
-                      onPressed: () async {},
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.notifications,
-                            color: Colors.green[900],
-                            size: 25,
-                          ),
-                          const SizedBox(
-                            width: 40.0,
-                          ),
-                          Text(
-                            'Notifications',
-                            style: TextStyle(
-                              color: Colors.green[900],
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        ],
-                      )),
-                  Divider(),
-                  TextButton(
-                      onPressed: () async {},
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.settings,
-                            color: Colors.green[900],
-                            size: 25,
-                          ),
-                          const SizedBox(
-                            width: 40.0,
-                          ),
-                          Text(
-                            'Settings',
-                            style: TextStyle(
-                              color: Colors.green[900],
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        ],
-                      )),
-                  TextButton(
-                      onPressed: () async {
-                        await _auth.signOut();
-                      },
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.logout,
-                            color: Colors.green[900],
-                            size: 25,
-                          ),
-                          const SizedBox(
-                            width: 40.0,
-                          ),
-                          Text(
-                            'Sign Out',
-                            style: TextStyle(
-                              color: Colors.green[900],
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        ],
-                      )),
-                ],
-              ),
-            )
+                            Text(
+                              'Sign out',
+                              style: TextStyle(color: Colors.white),
+                            )
+                          ],
+                        ))
+                  ],
+                )),
           ],
         ),
-      ),
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.eco_outlined),
-            activeIcon: Icon(Icons.eco),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications_outlined),
-            activeIcon: Icon(Icons.notifications),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book_outlined),
-            activeIcon: Icon(Icons.book),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.agriculture_outlined),
-            activeIcon: Icon(Icons.agriculture),
-            label: '',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        unselectedItemColor: Colors.green[900],
-        selectedItemColor: Colors.green[900],
-        onTap: onItemTapped,
-      ),
-    );
+        drawer: HomeDrawer(
+            selectedIndex: selectedIndex, onPageSelected: onItemTapped),
+        body: _pages[selectedIndex],
+        bottomNavigationBar: BottomNavBar(
+            onItemTapped: onItemTapped, selectedIndex: selectedIndex));
   }
 }
